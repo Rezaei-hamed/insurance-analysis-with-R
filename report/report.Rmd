@@ -1,0 +1,42 @@
+---
+title: "report"
+output: html
+---
+
+# Syfte
+
+Analysera vad som påverkar försäkringskostnader.
+
+# Metod:
+
+Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städade jag datat och skapade nya variabler som bmi_cat och age_group.
+
+-   Datastädning
+-   Skapande av nya variabler (bmi_cat , Age_group)
+-   Visualisering
+-   Regression med två modeller(model_1 och model_2)
+
+# Resultat
+
+-   Rökning påverkar mest
+-   Ålder påverkar
+-   BMI påverkar
+
+# Regressionsanalys
+
+Jag skapade två modeller.
+
+Modell 1 innehöll grundvariabler (age, bmi, smoker, children)
+
+Modell 2 innehöll även nya variabler (bmi_cat och age_group)
+
+Resultatet visar att: - Modell 2 bättre än modell 1 - Fler variabler \>\> bättre
+
+# Slutsats
+
+Analysen visar att livsstil har stor påverkan på försäkringskostnader, särskilt rökning. Regressionsmodellen kan användas som ett stöd, men den förklarar inte allt.
+
+# Begränsningar
+
+-   Modellen är ganska enkel och alla faktorer som påverkar kostnader finns inte med
+-   linjär modell
