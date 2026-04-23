@@ -1,8 +1,6 @@
-install.packages("tidyverse")
-
 library(tidyverse)
 
-df <- read_csv("data/insurance_costs.csv")
+df <- read_csv("../data/insurance_costs.csv")
 
 
 head(df)
@@ -17,22 +15,21 @@ colSums(is.na(df))
 
 
 df <- df %>%
-  mutate(customer_id = sub("^C", "", customer_id))
-
-
-df$age <- as.integer((df$age))
-df$children <- as.integer((df$children))
-
-df $sex <- as.factor(df $sex)
-df $region <- as.factor(df $region)
-df $smoker <- as.factor(df $smoker)
-
+  mutate(
+    customer_id = as.integer(sub("^C", "", customer_id)),
+    age = as.integer(age),
+    children = as.integer(children),
+    sex = as.factor(sex),
+    region = as.factor(region),
+    smoker = as.factor(smoker)
+  )
+    
 
 
 glimpse(df)
 
 
-df <-df %>% 
+df <- df %>% 
   mutate(
     bmi_cat = case_when(
       bmi < 18.5 ~ "Underweight",
@@ -66,11 +63,13 @@ df <- df %>%
 
 summary(df)
 
-df %>% 
+
+
+summary_stats <-df %>% 
   summarise(
-    mean_cost =mean (charges),
-    medain_cost =median(charges),
-    max_cost = max(charges)
+    mean_cost = mean (charges, na.rm = TRUE),
+    median_cost = median(charges, na.rm =TRUE),
+    max_cost = max(charges, na.rm = TRUE)
   )
 
 
@@ -78,20 +77,21 @@ df %>%
 
 df %>% 
   group_by(smoker) %>% 
-  summarise(mean_cost =mean(charges))
+  summarise(mean_cost = mean(charges, na.rm = TRUE), .groups = "drop")
 
 #bmi kategori 
 df %>% 
-  group_by(bmi_kategori) %>% 
-  summarise(mean_cost =mean(charges))
+  group_by(bmi_cat) %>% 
+  summarise(mean_cost = mean(charges, na.rm = TRUE), .groups ="drop")
 
 #Ålders group
 df %>% 
   group_by(age_group) %>% 
-  summarise(mean_cost =mean(charges))
+  summarise(mean_cost = mean(charges, na.rm = TRUE), .groups = "drop")
 
-#Visualisering
-ggplot(df, aes(x =charges))+
+#Visualisering'
+
+charges_hist_plot <- ggplot(df, aes(x =charges))+
   geom_histogram(bins =30, fill ="skyblue", color ="white")+
   labs(
     title = "Distribution of insurance Charges ",
@@ -101,17 +101,17 @@ ggplot(df, aes(x =charges))+
 theme_linedraw()
 
 
-ggplot(df, aes(x = smoker, y = charges))+
+charges_smoker_plot <- ggplot(df, aes(x = smoker, y = charges))+
   geom_boxplot(alpha = 0.5)+
   labs(
-    title = "charges by smoking status ",
-    x = "smoking status",
-    y = "charges "
+    title = "Charges by smoking status ",
+    x = "Smoking status",
+    y = "Charges "
   )+
   theme_minimal()
 
 
-ggplot(df, aes(x = age, y =charges))+
+age_charges_scatter_plot <- ggplot(df, aes(x = age, y =charges))+
   geom_point(alpha = 0.6)+
   geom_smooth(method = "lm",se =FALSE, color="red")+
   labs(
@@ -122,7 +122,7 @@ ggplot(df, aes(x = age, y =charges))+
   theme_minimal()
 
 
-ggplot(df, aes(x = bmi_cat, y = charges, fill = bmi_cat))+
+charges_bmi_box_plot <- ggplot(df, aes(x = bmi_cat, y = charges, fill = bmi_cat))+
   geom_boxplot(alpha = 0.6)+
   labs(
     title = "Charges by bmi categori",
@@ -132,12 +132,13 @@ ggplot(df, aes(x = bmi_cat, y = charges, fill = bmi_cat))+
   theme_minimal()
 
 
+df_model <- df %>%  drop_na()
 #Regression
-model_1 <- lm(charges ~ age + bmi + smoker + children, data = df)
+model_1 <- lm(charges ~ age + bmi + smoker + children, data = df_model)
 summary(model_1)
 
 
-model_2 <- lm(charges ~ age+ bmi+ smoker+ children + bmi_cat + age_group, data =df)
+model_2 <- lm(charges ~ smoker+ children + bmi_cat + age_group, data =df_model)
 summary(model_2)
 
 
@@ -147,7 +148,7 @@ summary(model_2)
 model_comparison <- tibble(
   model =c(
     "Model 1: age + bmi + smoker + children",
-    "Model 2 :bmi_cat + age_group"
+    "Model 2: smoker + children + bmi_cat + age_group"
   ),
   r_squared =c(
     summary(model_1)$r.squared,
@@ -167,10 +168,13 @@ model_comparison
 
 
 
-
-
-
-
 AIC(model_1,model_2)
 
 
+
+plots <- list(
+  hist = charges_hist_plot,
+  smoker = charges_smoker_plot,
+  age = age_charges_scatter_plot,
+  bmi = charges_bmi_box_plot
+)

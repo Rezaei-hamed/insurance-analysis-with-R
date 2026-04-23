@@ -1,36 +1,130 @@
 ---
-title: "report"
-output: html
+title: "Insurance Analysis with R"
+author: "Hamed Rezaei"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    theme: cosmo
 ---
 
 # Syfte
 
-Analysera vad som påverkar försäkringskostnader.
+Syftet med denna analys är att undersöka vilka faktorer som påverkar försäkringskostnader.
 
-# Metod:
+# Metod
 
 Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städade jag datat och skapade nya variabler som bmi_cat och age_group.
 
--   Datastädning
--   Skapande av nya variabler (bmi_cat , Age_group)
+-   Datasamling och översikt av data
+-   Datastädning och konvertering av variabler
+-   Skapande av nya variabler:
+    -   bmi_cat (bmi-kategorier)
+    -   age_group (Åldersgrupper)
 -   Visualisering
 -   Regression med två modeller(model_1 och model_2)
 
+```{r}
+source("../scripts/Analysis.R")
+
+```
+
+## Data förståelse
+
+-   Datasetet inehåller både numerisk och kategorisk variabler till example:
+
+-   numerisk(age, bmi, charges)
+
+-   kategoriska(smoker, sex, region)
+
+-   Numeriska variabler används för att mäta kontinuerliga värden,
+
+-   Kategoriska variabler används för att jämföra grupper.
+
+-   Det finns även saknade värden i datat,vilken för att analysen kan genomföras utan omfattande datastädning.
+
+
+
+
+
+
 # Resultat
 
--   Rökning påverkar mest
--   Ålder påverkar
--   BMI påverkar
+## Översikt av data
+
+```{r}
+summary_stats
+
+```
+
+-   Medelvärde = genomsnittlig kostnad
+-   Median = typisk kostnad
+-   Max = högsta kostnad
+
+## Distribution av kostnader
+
+```{r}
+plots$hist
+```
+
+-   Fördelningen är höger-skev
+-   De flesta har låga kostnader
+-   Några har mycket höga kostnader
+
+## Rökning och kostnader
+
+```{r}
+plots$smoker
+```
+
+-   Rökare har mycket högre kostnader
+-   Tydlig skilnad mellan grupper
+
+## Ålder och kostnader
+
+```{r}
+plots$age
+```
+
+-   Kostnader ökar med ålder
+-   Positivt samband
+
+## BMI och kostnader
+
+```{r}
+plots$bmi
+```
+
+-   Högre BMI \>\> högre kostnader
+-   Obese- grupprn stickar ut
 
 # Regressionsanalys
 
 Jag skapade två modeller.
 
-Modell 1 innehöll grundvariabler (age, bmi, smoker, children)
+Modell 1: innehöll grundvariabler (age, bmi, smoker, children)
 
-Modell 2 innehöll även nya variabler (bmi_cat och age_group)
+Modell 2: innehöll även nya variabler (bmi_cat och age_group)
 
-Resultatet visar att: - Modell 2 bättre än modell 1 - Fler variabler \>\> bättre
+## Modeljämförelse
+
+```{r}
+model_comparison
+```
+
+## AIC
+
+```{r}
+AIC(model_1, model_2)
+
+```
+
+## Tolkning
+
+-   Rökning har störst effekt
+-   Ålder påverkar kostnader
+-   BMI påverkar kostnader
+-   Modell 2 visar gruppskillnader
 
 # Slutsats
 
