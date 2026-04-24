@@ -16,22 +16,23 @@ Syftet med denna analys är att undersöka vilka faktorer som påverkar försäk
 
 Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städade jag datat och skapade nya variabler som bmi_cat och age_group.
 
--   Datasamling och översikt av data
--   Datastädning och konvertering av variabler
--   Skapande av nya variabler:
-    -   bmi_cat (bmi-kategorier)
-    -   age_group (Åldersgrupper)
+-   Datasamling och översikt
+
+-   Datastädning
+
+-   Skapande av nya variabler:(bmi_cat, age_group)
+
+-   Bmi_cat : delar in BMI i risknivåer för enklare analys.
+
+-   age_group: grupperar ålder för at förenkla tolkning och se skillnader.
+
 -   Visualisering
--   Regression med två modeller(model_1 och model_2)
 
-```{r}
-source("../scripts/Analysis.R")
-
-```
+-   Regression (model_1 och model_2)
 
 ## Data förståelse
 
--   Datasetet inehåller både numerisk och kategorisk variabler till example:
+-   Datasetet innehåller både numerisk och kategorisk variabler till exemple:
 
 -   numerisk(age, bmi, charges)
 
@@ -41,12 +42,12 @@ source("../scripts/Analysis.R")
 
 -   Kategoriska variabler används för att jämföra grupper.
 
--   Det finns även saknade värden i datat,vilken för att analysen kan genomföras utan omfattande datastädning.
+-   Det finns även några saknade värden i datat,vilket gör att analysen kan genomföras utan omfattande datastädning.
 
+```{r}
+source("../scripts/Analysis.R")
 
-
-
-
+```
 
 # Resultat
 
@@ -67,7 +68,7 @@ summary_stats
 plots$hist
 ```
 
--   Fördelningen är höger-skev
+-   Fördelningen är högerskev
 -   De flesta har låga kostnader
 -   Några har mycket höga kostnader
 
@@ -78,7 +79,7 @@ plots$smoker
 ```
 
 -   Rökare har mycket högre kostnader
--   Tydlig skilnad mellan grupper
+-   Tydlig skillnad mellan grupper
 
 ## Ålder och kostnader
 
@@ -95,8 +96,8 @@ plots$age
 plots$bmi
 ```
 
--   Högre BMI \>\> högre kostnader
--   Obese- grupprn stickar ut
+-   Högre BMI \> högre kostnader
+-   Gruppen "Obese" sticker ut
 
 # Regressionsanalys
 
@@ -129,6 +130,8 @@ AIC(model_1, model_2)
 # Slutsats
 
 Analysen visar att livsstil har stor påverkan på försäkringskostnader, särskilt rökning. Regressionsmodellen kan användas som ett stöd, men den förklarar inte allt.
+
+Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa en rättvis jämförelse.
 
 # Begränsningar
 

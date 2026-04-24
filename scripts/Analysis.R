@@ -1,19 +1,23 @@
 library(tidyverse)
 
+
+#läser in data och får en översikt 
 df <- read_csv("../data/insurance_costs.csv")
 
 
+#Att se datatyper ,sammanfattning och saknade värde
 head(df)
 str(df)
 summary(df)
 
+#översikt och datatyper och variabler 
 glimpse(df)
 
-
+#Att se om det finns saknade värde 
 colSums(is.na(df))
 
 
-
+# Datastädning och omvandlar variabler till rätt datatyper 
 df <- df %>%
   mutate(
     customer_id = as.integer(sub("^C", "", customer_id)),
@@ -21,14 +25,22 @@ df <- df %>%
     children = as.integer(children),
     sex = as.factor(sex),
     region = as.factor(region),
+    smoker = tolower(smoker),
     smoker = as.factor(smoker)
   )
     
 
+# Variabler som exercise_level, plan_type och chronic_condition
+# ingår inte i modellen men kan också påverka kostnader
 
+
+
+
+
+#Kontrollerar att ändringar är korrekta
 glimpse(df)
 
-
+#skapar nya variabler (motivering: förenklar analys av hur hälsa påverkar kostnader )
 df <- df %>% 
   mutate(
     bmi_cat = case_when(
@@ -44,7 +56,7 @@ df <- df %>%
     )
   )
 
-
+# Skapar åldersgrupper(motivering: det gör lättare att jämföra olika livsfaser)
 df <- df %>% 
   mutate(
     age_group =case_when(
@@ -60,11 +72,11 @@ df <- df %>%
   )
 
 
-
+#samanfattning efter datastädning
 summary(df)
 
 
-
+#Grundläggande statistik över kostnader 
 summary_stats <-df %>% 
   summarise(
     mean_cost = mean (charges, na.rm = TRUE),
@@ -74,23 +86,24 @@ summary_stats <-df %>%
 
 
 #group analysis
-
+#jämför kostnader mellan rökare och ej rökare 
 df %>% 
   group_by(smoker) %>% 
   summarise(mean_cost = mean(charges, na.rm = TRUE), .groups = "drop")
 
-#bmi kategori 
+#jämför kostnader mellan bmi kategori 
 df %>% 
   group_by(bmi_cat) %>% 
   summarise(mean_cost = mean(charges, na.rm = TRUE), .groups ="drop")
 
-#Ålders group
+#jämför kostnader mellan ålders group
 df %>% 
   group_by(age_group) %>% 
   summarise(mean_cost = mean(charges, na.rm = TRUE), .groups = "drop")
 
-#Visualisering'
+#Visualisering
 
+#visar hur kostnaderna är fördelade 
 charges_hist_plot <- ggplot(df, aes(x =charges))+
   geom_histogram(bins =30, fill ="skyblue", color ="white")+
   labs(
@@ -100,7 +113,13 @@ charges_hist_plot <- ggplot(df, aes(x =charges))+
   )+
 theme_linedraw()
 
+#histogram tolkning:
+#kostnaderna är snedfördelade där de flesta har låga kostnader 
+# men några har mycket höga värden
 
+
+
+#visar skillnad i kostnad mellan rökare och ej rökare 
 charges_smoker_plot <- ggplot(df, aes(x = smoker, y = charges))+
   geom_boxplot(alpha = 0.5)+
   labs(
@@ -109,8 +128,13 @@ charges_smoker_plot <- ggplot(df, aes(x = smoker, y = charges))+
     y = "Charges "
   )+
   theme_minimal()
+#Tolkning:Rökare har betydligt högre kostnader än ej rökare 
 
 
+
+
+
+#visar samband mellan ålder och kostnader 
 age_charges_scatter_plot <- ggplot(df, aes(x = age, y =charges))+
   geom_point(alpha = 0.6)+
   geom_smooth(method = "lm",se =FALSE, color="red")+
@@ -120,8 +144,11 @@ age_charges_scatter_plot <- ggplot(df, aes(x = age, y =charges))+
     y = "Charges"
   )+
   theme_minimal()
+# Tolkning:kostnader ökar med ålder ,vilket tyder på ett positivt samband 
 
 
+
+#visar skillnad i kostnader mellan bmi-kategorier 
 charges_bmi_box_plot <- ggplot(df, aes(x = bmi_cat, y = charges, fill = bmi_cat))+
   geom_boxplot(alpha = 0.6)+
   labs(
@@ -130,20 +157,32 @@ charges_bmi_box_plot <- ggplot(df, aes(x = bmi_cat, y = charges, fill = bmi_cat)
     y = "Charges"
   )+
   theme_minimal()
+#Tolkning: högre BMI är kopplat till högre kostnader,särskilt i "Obese"
 
 
+
+
+#tar bort saknade värden inför modellering
 df_model <- df %>%  drop_na()
+
+
 #Regression
+
+#model_1 :undersöker direkt samband mellan variabler och kostnader 
 model_1 <- lm(charges ~ age + bmi + smoker + children, data = df_model)
 summary(model_1)
+# Tolkning:smoker har störst påverkan på kostnader,följt av ålder och BMI
 
 
+
+#model_2 :undersöka skillnader mellan grupper 
 model_2 <- lm(charges ~ smoker+ children + bmi_cat + age_group, data =df_model)
 summary(model_2)
+#Tolkning:Modellen visar skillnader mellan grupper,för rökare och BMI
 
 
 
-### Behöver jobba vidare med detta -----
+#jämför modeller 
 
 model_comparison <- tibble(
   model =c(
@@ -171,10 +210,32 @@ model_comparison
 AIC(model_1,model_2)
 
 
-
+#samlar alla grafer
 plots <- list(
   hist = charges_hist_plot,
   smoker = charges_smoker_plot,
   age = age_charges_scatter_plot,
   bmi = charges_bmi_box_plot
 )
+
+#slutsats:
+# Rökning,ålder och BMI är viktigaste faktorer som påverkar kostnader 
+#Modellen visar tydliga samband men fångar inte alla faktorer.
+
+
+
+#Reflektion:
+#Jag tycker att jag lyckades bra med att strukturera analysen och använda båda
+#visualisering och regression.Det svårare var att tolka modellerna.
+#Jag anser att arbetet motsvarar VG eftersom jag uppfyller alla krav.
+
+
+
+
+
+
+
+
+
+
+
