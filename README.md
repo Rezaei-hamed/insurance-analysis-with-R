@@ -1,29 +1,27 @@
----
-title: "README"
-output: html
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # Insurance Cost Analysis
 
+## Syfte
 
-## Syftet
- Analysera vilka faktorer som påverkar försäkringskostnader.
+Analysera vilka faktorer som påverkar försäkringskostnader.
 
+## Rapport
+
+[Öppna rapport](report/report.html)
 
 ## Hur man kör projektet:
 
-1.  Öppna projektet i RStudio(.Rproj)
+1.  Öppna projektet i RStudio (.Rproj)
 
-2.  Installera paket:
+2.  Installera paket: 
+```r
 install.packages("tidyverse")
+```
+
 
 3.  Kör analysen :
-- Öppna `report/report.Rmd`
-- klicka på "Knit" för att generera rapporten
 
+-   Öppna `report/report.Rmd`
+-   Klicka på "Knit" för att generera rapporten
 
 ## Innehåll
 
@@ -34,14 +32,13 @@ install.packages("tidyverse")
 -   Modelljämförelse
 
 
-
 ## Struktur
 
--   `data/`  > dataset
+-   `data/` - dataset
 
--   `scripts/` > analyskod(Analysis.R)
+-   `scripts/` - analyskod(Analysis.R)
 
--   `report/` > rapport (report.Rmd)
+-   `report/` - rapport (report.Rmd, report.html)
 
 ## Paket
 
