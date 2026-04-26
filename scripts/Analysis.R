@@ -31,7 +31,8 @@ df <- df %>%
     
 
 # Variabler som exercise_level, plan_type och chronic_condition
-# ingår inte i modellen men kan också påverka kostnader
+# finns i datasetet men inkluderas inte i modellen 
+#detta är en begränsning och kan påverka resultatet.
 
 
 
@@ -182,6 +183,33 @@ summary(model_2)
 
 
 
+
+
+
+# Modellkontroll (diagnostics)
+
+# 1. Normalfördelning av residualer (Q-Q plot)
+qqnorm(resid(model_2))
+qqline(resid(model_2), col = "red")
+
+# 2. Alla diagnostiska grafer
+par(mfrow = c(2,2))   # visar 4 plots i samma fönster
+plot(model_2)
+
+# Återställ layout
+par(mfrow = c(1,1))
+# qqnorm + qqline → kontrollerar om residualerna är normalfördelade
+# plot(model_2) → visar 4 viktiga tester:
+# 1. Residuals vs Fitted → linjäritet
+# 2. Normal Q-Q → normalfördelning
+# 3. Scale-Location → konstant varians
+# 4. Residuals vs Leverage → outliers
+
+
+
+
+
+
 #jämför modeller 
 
 model_comparison <- tibble(
@@ -207,9 +235,6 @@ model_comparison
 
 
 
-AIC(model_1,model_2)
-
-
 #samlar alla grafer
 plots <- list(
   hist = charges_hist_plot,
@@ -217,6 +242,7 @@ plots <- list(
   age = age_charges_scatter_plot,
   bmi = charges_bmi_box_plot
 )
+
 
 #slutsats:
 # Rökning,ålder och BMI är viktigaste faktorer som påverkar kostnader 
@@ -228,10 +254,6 @@ plots <- list(
 #Jag tycker att jag lyckades bra med att strukturera analysen och använda båda
 #visualisering och regression.Det svårare var att tolka modellerna.
 #Jag anser att arbetet motsvarar VG eftersom jag uppfyller alla krav.
-
-
-
-
 
 
 

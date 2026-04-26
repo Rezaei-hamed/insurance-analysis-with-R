@@ -24,7 +24,7 @@ Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städ
 
 -   Bmi_cat : delar in BMI i risknivåer för enklare analys.
 
--   age_group: grupperar ålder för at förenkla tolkning och se skillnader.
+-   age_group: grupperar ålder för att förenkla tolkning och se skillnader.
 
 -   Visualisering
 
@@ -34,9 +34,9 @@ Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städ
 
 -   Datasetet innehåller både numerisk och kategorisk variabler till exemple:
 
--   numerisk(age, bmi, charges)
+-   numerisk variabler(age, bmi, charges)
 
--   kategoriska(smoker, sex, region)
+-   kategoriska variabler(smoker, sex, region)
 
 -   Numeriska variabler används för att mäta kontinuerliga värden,
 
@@ -113,12 +113,8 @@ Modell 2: innehöll även nya variabler (bmi_cat och age_group)
 model_comparison
 ```
 
-## AIC
 
-```{r}
-AIC(model_1, model_2)
 
-```
 
 ## Tolkning
 
@@ -127,13 +123,21 @@ AIC(model_1, model_2)
 -   BMI påverkar kostnader
 -   Modell 2 visar gruppskillnader
 
+
+
+
+
 # Slutsats
 
 Analysen visar att livsstil har stor påverkan på försäkringskostnader, särskilt rökning. Regressionsmodellen kan användas som ett stöd, men den förklarar inte allt.
 
 Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa en rättvis jämförelse.
 
+
+
+
 # Begränsningar
 
 -   Modellen är ganska enkel och alla faktorer som påverkar kostnader finns inte med
+- Modellen inkluderar inte alla variabler i datasetet,t.ex. exercise_level och plan_type. 
 -   linjär modell
