@@ -8,7 +8,7 @@ Analysera vilka faktorer som påverkar försäkringskostnader.
 
 [Öppna rapport](report/report.html)
 
-## Hur man kör projektet:
+## Hur man kör projektet
 
 1.  Öppna projektet i RStudio (.Rproj)
 
@@ -18,7 +18,7 @@ install.packages("tidyverse")
 ```
 
 
-3.  Kör analysen :
+3.  Kör analysen 
 
 -   Öppna `report/report.Rmd`
 -   Klicka på "Knit" för att generera rapporten

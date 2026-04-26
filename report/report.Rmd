@@ -138,6 +138,6 @@ Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa 
 
 # Begränsningar
 
--   Modellen är ganska enkel och alla faktorer som påverkar kostnader finns inte med
-- Modellen inkluderar inte alla variabler i datasetet,t.ex. exercise_level och plan_type. 
--   linjär modell
+- Modellen är ganska enkel och alla faktorer som påverkar kostnader finns inte med
+- Modellen inkluderar inte alla variabler i datasetet, t.ex. exercise_level och plan_type. 
+- linjär modell
