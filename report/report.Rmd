@@ -42,12 +42,22 @@ Jag har arbetat i R där jag först läste in och undersökte datat. Sedan städ
 
 -   Kategoriska variabler används för att jämföra grupper.
 
--   Det finns även några saknade värden i datat,vilket gör att analysen kan genomföras utan omfattande datastädning.
+- Datasetet kontrollerades för saknade värden och inga saknade observationer identifierades, vilket gjorde att analysen kunde genomföras utan omfattande datastädning.
 
 ```{r}
 source("../scripts/Analysis.R")
 
 ```
+```{r}
+colSums(is.na(df))
+
+```
+
+
+
+
+
+
 
 # Resultat
 
@@ -72,6 +82,8 @@ plots$hist
 -   De flesta har låga kostnader
 -   Några har mycket höga kostnader
 
+
+
 ## Rökning och kostnader
 
 ```{r}
@@ -90,6 +102,9 @@ plots$age
 -   Kostnader ökar med ålder
 -   Positivt samband
 
+
+
+
 ## BMI och kostnader
 
 ```{r}
@@ -103,16 +118,26 @@ plots$bmi
 
 Jag skapade två modeller.
 
-Modell 1: innehöll grundvariabler (age, bmi, smoker, children)
+Model 1: innehöll grundvariabler (age, bmi, smoker, children)
 
-Modell 2: innehöll även nya variabler (bmi_cat och age_group)
+Model 2: innehöll även nya variabler (bmi_cat och age_group)
+
+
+
+
 
 ## Modeljämförelse
-
 ```{r}
 model_comparison
 ```
 
+### Modellutvärdering
+
+- Model 2 hade ett högre justerat R² jämfört med model 1, och det  innebär att modellen förklarar en större del av variationen i försäkringskostnader.
+
+- Residual standard error användes för att mäta modellens prediktionsfel. Ett lägre värde indikerar bättre modellprestanda.
+
+- Modelljämförelsen visar att båda modellerna fångar viktiga samband i datan, men model 2 ger en tydligare bild av skillnader mellan grupper genom variablerna bmi_cat och age_group.
 
 
 
@@ -121,7 +146,34 @@ model_comparison
 -   Rökning har störst effekt
 -   Ålder påverkar kostnader
 -   BMI påverkar kostnader
--   Modell 2 visar gruppskillnader
+-   Model 2 visar gruppskillnader
+
+
+
+
+
+## Regressionsdiagnostik
+
+```{r}
+qqnorm(resid(model_2))
+qqline(resid(model_2), col = "red")
+
+
+par(mfrow = c(2,2))
+plot(model_2)
+
+par(mfrow = c(1,1))
+
+```
+
+
+Residualdiagrammet visar ett relativt slumpmässigt mönster, vilket tyder på att antagandet om linjäritet är rimligt uppfyllt.
+
+Q-Q-plottens punkter följer huvudsakligen den diagonala linjen, vilket indikerar att residualerna är ungefär normalfördelade.
+
+Scale-Location-plottens spridning visar viss variation, vilket kan tyda på svag heteroskedasticitet.
+
+Några observationer har hög leverage och kan påverka modellen mer än övriga datapunkter.
 
 
 
@@ -138,6 +190,8 @@ Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa 
 
 # Begränsningar
 
-- Modellen är ganska enkel och alla faktorer som påverkar kostnader finns inte med
-- Modellen inkluderar inte alla variabler i datasetet, t.ex. exercise_level och plan_type. 
-- linjär modell
+- Modellen inkluderar inte alla variabler som kan påverka försäkringskostnader.
+- Variabler som exercise_level, plan_type och chronic_condition användes inte i modellen.
+- Modellen är linjär, vilket innebär att vissa mer komplexa samband kan ha missats.
+- Resultaten visar samband men bevisar inte kausalitet.
+
