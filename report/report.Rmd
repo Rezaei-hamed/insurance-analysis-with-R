@@ -180,7 +180,6 @@ Några observationer har hög leverage och kan påverka modellen mer än övriga
 
 
 # Slutsats
-
 Analysen visar att livsstil har stor påverkan på försäkringskostnader, särskilt rökning. Regressionsmodellen kan användas som ett stöd, men den förklarar inte allt.
 
 Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa en rättvis jämförelse.
@@ -188,8 +187,15 @@ Modelljämförelsen baseras på samma dataset (df_model) för att säkerställa 
 
 
 
-# Begränsningar
+## Reflektion över modellen
+- Regressionsmodellerna gav användbara insikter om vilka faktorer som påverkar försäkringskostnader. Särskilt rökning visade en stark påverkan på kostnaderna i båda modellerna.
 
+- Diagnostiken visade samtidigt att modellen har vissa begränsningar och att resultaten därför bör tolkas med viss försiktighet. Trots detta ger modellen en tydlig översikt över viktiga samband i datan.
+
+
+
+
+# Begränsningar
 - Modellen inkluderar inte alla variabler som kan påverka försäkringskostnader.
 - Variabler som exercise_level, plan_type och chronic_condition användes inte i modellen.
 - Modellen är linjär, vilket innebär att vissa mer komplexa samband kan ha missats.
